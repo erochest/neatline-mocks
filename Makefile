@@ -18,6 +18,7 @@ run:
 	stack build --pedantic --exec "neatline-mocks --n 42 \
 		--center 1970-07-01 \
 		--span 730 \
+		--host neatline.dev \
 		--user omeka \
 		--password omeka \
 		--database omeka"
@@ -26,6 +27,7 @@ watch-run:
 	stack build --pedantic --file-watch --exec "neatline-mocks --n 42 \
 		--center 1970-07-01 \
 		--span 730 \
+		--host neatline.dev \
 		--user omeka \
 		--password omeka \
 		--database omeka"

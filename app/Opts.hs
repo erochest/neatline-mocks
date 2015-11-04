@@ -64,5 +64,5 @@ opts = info (helper <*> opts')
        <> progDesc "Load mock data into Omeka for testing Neatline SIMILE."
        <> header "neatline-mocks -- create mock data in Omeka.")
 
-parseActions :: IO Actions
-parseActions = execParser opts
+parseActions :: Script Actions
+parseActions = scriptIO $ execParser opts

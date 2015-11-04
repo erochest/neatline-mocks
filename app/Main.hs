@@ -1,8 +1,15 @@
+{-# LANGUAGE OverloadedStrings #-}
+
+
 module Main where
 
 
+import           Control.Error
+
 import           Opts
+
+import           NeatlineMock.Actions
 
 
 main :: IO ()
-main = print =<< parseActions
+main = runScript $ parseActions >>= runActions

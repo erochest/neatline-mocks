@@ -16,7 +16,8 @@ build-type:          Simple
 cabal-version:       >=1.10
 
 library
-  exposed-modules:     NeatlineMock
+  exposed-modules:     NeatlineMock.Actions
+                     , NeatlineMock.Generate
                      , NeatlineMock.Types
   -- other-modules:       
   -- other-extensions:    
