@@ -1,4 +1,3 @@
-
 SRC=$(shell find src -name '*.hs')
 
 CABAL=stack
@@ -15,8 +14,21 @@ test: build
 	stack test
 
 
-run: build
-	stack exec -- neatline-mocks
+run:
+	stack build --pedantic --exec "neatline-mocks --n 42 \
+		--center 1970-07-01 \
+		--span 730 \
+		--user omeka \
+		--password omeka \
+		--database omeka"
+
+watch-run:
+	stack build --pedantic --file-watch --exec "neatline-mocks --n 42 \
+		--center 1970-07-01 \
+		--span 730 \
+		--user omeka \
+		--password omeka \
+		--database omeka"
 
 
 # docs:
@@ -46,7 +58,7 @@ tags: ${SRC}
 	codex update
 
 argon:
-        find src -name \*.hs | xargs argon
+	find src -name \*.hs | xargs argon
 
 hlint:
 	hlint *.hs src specs
