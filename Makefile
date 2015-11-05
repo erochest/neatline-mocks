@@ -15,18 +15,26 @@ test: build
 
 
 run:
-	stack build --pedantic --exec "neatline-mocks --n 42 \
+	stack build --pedantic --exec "neatline-mocks \
+		--n 500 \
+		--table omekaneatline_records \
 		--center 1970-07-01 \
 		--span 730 \
+		--owner 1 \
+		--exhibit 6 \
 		--host neatline.dev \
 		--user omeka \
 		--password omeka \
 		--database omeka"
 
 watch-run:
-	stack build --pedantic --file-watch --exec "neatline-mocks --n 42 \
+	stack build --pedantic --file-watch --exec "neatline-mocks \
+		--n 500 \
+		--table omekaneatline_records \
 		--center 1970-07-01 \
 		--span 730 \
+		--owner 1 \
+		--exhibit 6 \
 		--host neatline.dev \
 		--user omeka \
 		--password omeka \

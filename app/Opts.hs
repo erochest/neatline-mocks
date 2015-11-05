@@ -6,12 +6,11 @@ module Opts where
 
 import           Control.Error
 import           Control.Monad.Trans.Class
-import           Data.Thyme.Clock
-import           Data.Thyme.Time
+import qualified Data.Text                 as T
+import           Data.Time
 import           Database.MySQL.Base
 import           Options.Applicative
 import           Options.Applicative.Types
-import           System.Locale
 
 import           NeatlineMock.Types
 
@@ -41,6 +40,13 @@ opts' :: Parser Actions
 opts' = Generate
         <$> option auto (  short 'n' <> long "n" <> metavar "INT"
                         <> help "The number of Neatline items to create.")
+        <*> option readText
+                (  short 't' <> long "table" <> metavar "TABLE_NAME"
+                <> help "The name of the Neatline records table to populate.")
+        <*> option auto (  short 'o' <> long "owner" <> metavar "OWNER_ID"
+                        <> help "The database ID # for the items' owner.")
+        <*> option auto (  short 'e' <> long "exhibit" <> metavar "EXHIBIT_ID"
+                        <> help "The database ID # for the items' exhibit.")
         <*> option readUTCTime
                 (  short 'c' <> long "center" <> metavar "YYYY-MM-DD"
                 <> help "The date to center the random dates around.")
@@ -55,8 +61,11 @@ readUTCTime = ReadM
               . lift
               . hoistEither
               . note (ErrorMsg "Invalid date format. Use YYYY-MM-DD.")
-              . parseTime defaultTimeLocale (iso8601DateFormat Nothing)
+              . parseTimeM True defaultTimeLocale (iso8601DateFormat Nothing)
             =<< str
+
+readText :: ReadM T.Text
+readText = T.pack <$> str
 
 opts :: ParserInfo Actions
 opts = info (helper <*> opts')

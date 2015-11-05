@@ -19,6 +19,7 @@ library
   exposed-modules:     NeatlineMock.Actions
                      , NeatlineMock.Generate
                      , NeatlineMock.Types
+                     , NeatlineMock.Utils
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >=4.8 && <4.9
@@ -27,7 +28,7 @@ library
                      , mwc-random
                      , mysql-simple
                      , text
-                     , thyme
+                     , time
   hs-source-dirs:      src
   default-language:    Haskell2010
 
@@ -40,9 +41,8 @@ executable neatline-mocks
                      , errors
                      , mysql
                      , mysql-simple
-                     , old-locale
                      , text
-                     , thyme
+                     , time
                      , transformers
                      , optparse-applicative
   hs-source-dirs:      app
