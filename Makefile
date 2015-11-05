@@ -3,6 +3,10 @@ SRC=$(shell find src -name '*.hs')
 CABAL=stack
 FLAGS=--enable-tests
 
+N=300
+CENTER=1970-07-01
+SPAN=3650
+
 all: init test docs package
 
 init: stack.yaml
@@ -16,10 +20,10 @@ test: build
 
 run:
 	stack build --pedantic --exec "neatline-mocks \
-		--n 500 \
+		--n $(N) \
 		--table omekaneatline_records \
-		--center 1970-07-01 \
-		--span 730 \
+		--center $(CENTER) \
+		--span $(SPAN) \
 		--owner 1 \
 		--exhibit 6 \
 		--host neatline.dev \
@@ -29,10 +33,10 @@ run:
 
 watch-run:
 	stack build --pedantic --file-watch --exec "neatline-mocks \
-		--n 500 \
+		--n $(N) \
 		--table omekaneatline_records \
-		--center 1970-07-01 \
-		--span 730 \
+		--center $(CENTER) \
+		--span $(SPAN) \
 		--owner 1 \
 		--exhibit 6 \
 		--host neatline.dev \
