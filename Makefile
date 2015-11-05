@@ -19,6 +19,7 @@ test: build
 
 
 run:
+	echo "delete from omekaneatline_records where exhibit_id=6;" | mysql -hneatline.dev -uomeka -pomeka omeka
 	stack build --pedantic --exec "neatline-mocks \
 		--n $(N) \
 		--table omekaneatline_records \
