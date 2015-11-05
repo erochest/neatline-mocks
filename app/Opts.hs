@@ -47,22 +47,22 @@ opts' = Generate
                         <> help "The database ID # for the items' owner.")
         <*> option auto (  short 'e' <> long "exhibit" <> metavar "EXHIBIT_ID"
                         <> help "The database ID # for the items' exhibit.")
-        <*> option readUTCTime
+        <*> option readDay
                 (  short 'c' <> long "center" <> metavar "YYYY-MM-DD"
                 <> help "The date to center the random dates around.")
-        <*> option (secondsToDiffTime . (* 86400) <$> auto)
+        <*> option auto
                 (  short 's' <> long "span" <> metavar "DAYS" <> value 365
                 <> help "The span of days to generate random values for.\
                         \ Default is 365.")
         <*> connectInfo
 
-readUTCTime :: ReadM UTCTime
-readUTCTime = ReadM
-              . lift
-              . hoistEither
-              . note (ErrorMsg "Invalid date format. Use YYYY-MM-DD.")
-              . parseTimeM True defaultTimeLocale (iso8601DateFormat Nothing)
-            =<< str
+readDay :: ReadM Day
+readDay = ReadM
+          . lift
+          . hoistEither
+          . note (ErrorMsg "Invalid date format. Use YYYY-MM-DD.")
+          . parseTimeM True defaultTimeLocale (iso8601DateFormat Nothing)
+        =<< str
 
 readText :: ReadM T.Text
 readText = T.pack <$> str

@@ -20,8 +20,8 @@ data Actions
     , _generateTableName   :: !T.Text
     , _generateOwnerId     :: !Int
     , _generateExhibitId   :: !Int
-    , _generateCenterDate  :: !UTCTime
-    , _generateDateRange   :: !DiffTime
+    , _generateCenterDate  :: !Day
+    , _generateDateRange   :: !Integer
     , _generateConnectInfo :: !ConnectInfo
     } deriving (Show, Eq, Typeable, Generic)
 $(makePrisms ''Actions)
@@ -56,10 +56,10 @@ data NeatlineRecord
     , _nlPointRadius         :: !(Maybe Int)
     , _nlZIndex              :: !(Maybe Int)
     , _nlWeight              :: !(Maybe Int)
-    , _nlStartDate           :: !(Maybe UTCTime)
-    , _nlEndDate             :: !(Maybe UTCTime)
-    , _nlAfterDate           :: !(Maybe UTCTime)
-    , _nlBeforeDate          :: !(Maybe UTCTime)
+    , _nlStartDate           :: !(Maybe Day)
+    , _nlEndDate             :: !(Maybe Day)
+    , _nlAfterDate           :: !(Maybe Day)
+    , _nlBeforeDate          :: !(Maybe Day)
     , _nlPointImage          :: !(Maybe T.Text)
     , _nlWMSAddress          :: !(Maybe T.Text)
     , _nlWMSLayers           :: !(Maybe T.Text)

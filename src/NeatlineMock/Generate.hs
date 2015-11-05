@@ -20,10 +20,10 @@ import           NeatlineMock.Utils
 
 
 type RowTuple = ( Int, Int, Maybe T.Text, Maybe T.Text, Maybe T.Text
-                , Maybe T.Text, Maybe UTCTime, Maybe UTCTime
+                , Maybe T.Text, Maybe Day, Maybe Day
                 )
 
-generate :: Int -> T.Text -> Int -> Int -> UTCTime -> DiffTime -> ConnectInfo
+generate :: Int -> T.Text -> Int -> Int -> Day -> Integer -> ConnectInfo
          -> Script ()
 generate n tableName ownerId exhibitId center dateRange cinfo = do
   cxn     <- scriptIO $ connect cinfo
@@ -50,28 +50,29 @@ toRow NLRecord{..} =
     , _nlWidgets, _nlStartDate, _nlEndDate
     )
 
-randomDate :: UTCTime -> UTCTime -> GenIO -> IO UTCTime
-randomDate UTCTime{utctDay=fromDay} UTCTime{utctDay=toDay} g =
-    UTCTime <$> fmap toEnum (uniformR (fromEnum fromDay, fromEnum toDay) g)
-            <*> fmap (secondsToDiffTime . fromIntegral)
-                    (uniformR ((-1) :: Int, 24*60*60) g)
+randomDate :: Day -> Day -> GenIO -> IO Day
+randomDate fromDay toDay g =
+    toEnum <$> uniformR (fromEnum fromDay, fromEnum toDay) g
 
-randomRecord :: Int -> Int -> UTCTime -> DiffTime -> GenIO -> IO NeatlineRecord
+randomRecord :: Int -> Int -> Day -> Integer -> GenIO -> IO NeatlineRecord
 randomRecord ownerId exhibitId center dateRange g = do
-  let nRange     = toEnum $ fromEnum dateRange :: NominalDiffTime
-      (from, to) = (addUTCTime (-nRange) center, addUTCTime nRange center)
-  now <- getCurrentTime
-  start  <- randomDate from to g
+  let (from, to) = (addDays (-dateRange) center, addDays dateRange center)
+  now    <- getCurrentTime
+  start' <- randomDate from to g
   let title      = T.pack
-                   $ "record " ++ formatTime defaultTimeLocale "%Y-%m-%d" start
+                   $ "record " ++ formatTime defaultTimeLocale "%Y-%m-%d" start'
       nullIsland = "POINT (0 0)"
-  isSpan <- uniform g
-  end    <- if isSpan
-            then Just <$> randomDate start to g
-            else return Nothing
+  isSpan       <- uniform g
+  (start, end) <- if isSpan
+                  then do
+                    end' <- randomDate start' to g
+                    return $ if start' < end'
+                             then (Just start', Just end'  )
+                             else (Just end',   Just start')
+                  else return (Just start', Nothing)
   return $ NLRecord ownerId Nothing exhibitId now Nothing False False Nothing
              (Just title) (Just title) Nothing nullIsland Nothing
              (Just "Simile") (Just "StaticBubble") Nothing Nothing Nothing
              Nothing Nothing Nothing Nothing Nothing Nothing Nothing Nothing
-             Nothing (Just start) end Nothing Nothing Nothing Nothing Nothing
+             Nothing start end Nothing Nothing Nothing Nothing Nothing
              Nothing Nothing Nothing Nothing
