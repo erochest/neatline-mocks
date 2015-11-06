@@ -3,9 +3,11 @@ SRC=$(shell find src -name '*.hs')
 CABAL=stack
 FLAGS=--enable-tests
 
-N=300
 CENTER=1970-07-01
+N=20
 SPAN=3650
+# N=200
+# SPAN=3650
 
 all: init test docs package
 
